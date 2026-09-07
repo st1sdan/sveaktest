@@ -1,0 +1,83 @@
+include pug/_icons
+include pug/_actions
+
+doctype html
+html(lang=lang)
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="description" content=description)
+    meta(name="theme-color" content="#1b1a17")
+    title= title
+    link(rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%231b1a17'/><circle cx='16' cy='16' r='6' fill='%23e4572e'/></svg>")
+    link(rel="stylesheet" href="/src/styles/main.scss")
+    script(type="module" src="/src/scripts/cards-count.js")
+  body
+    input#nav-toggle.nav-toggle(type="checkbox")
+
+    .layout
+      header.header
+        label.burger(for="nav-toggle")
+          span.burger__box
+            span.burger__line
+          span.visually-hidden Открыть или закрыть меню
+        a.brand(href="#main")
+          span.brand__mark
+          span.brand__text= brand
+        +actions
+
+      label.backdrop(for="nav-toggle" aria-hidden="true")
+
+      nav#nav.nav(aria-label="Основная навигация")
+        .nav__inner
+          .nav__head
+            label.nav__close(for="nav-toggle")
+              +icon-close
+              span.visually-hidden Закрыть меню
+            span.nav__title Навигация
+          ul.nav__list
+            each item, i in menu
+              li.nav__item(style=`--i:${i}`)
+                a.nav__link(href=item.href class=item.current ? 'is-current' : '' aria-current=item.current ? 'page' : false)
+                  span.nav__dot(aria-hidden="true")
+                  span.nav__label= item.label
+
+      main#main.main
+        .container
+          .page-head
+            h1.page-head__title Frutiger Aero каталог
+            .count(hidden)
+              label.count__label(for="cards-count") Карточек на странице
+              .count__row
+                input#cards-count.count__range(
+                  type="range"
+                  min="1"
+                  max=cards.length
+                  value=cards.length
+                  step="1"
+                  aria-describedby="cards-count-hint"
+                )
+                output.count__value(for="cards-count")= cards.length
+              p#cards-count-hint.count__hint
+
+          ul.cards
+            each card in cards
+              li.card(style=`--i:${card.index}`)
+                button.card__link(type="button")
+                  span.card__media(aria-hidden="true")
+                    span.card__num= String(card.index).padStart(2, '0')
+                  span.card__more
+                    span Подробнее
+                    +icon-arrow
+                  span.card__content
+                    span.card__tag= card.tag
+                    span.card__title= card.title
+                    span.card__excerpt
+                      span.card__text= card.text
+
+      footer.footer
+        .container.footer__inner
+          h2.footer__title= footer.title
+          each text in footer.paragraphs
+            p.footer__text= text
+          p.footer__meta © #{new Date().getFullYear()} Pavlenko Nikita

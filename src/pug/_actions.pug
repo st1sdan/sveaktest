@@ -1,0 +1,13 @@
+include _icons
+
+mixin actions
+  .actions(role="group" aria-label="Действия")
+    button.actions__btn(type="button")
+      +icon-play
+      span.visually-hidden Воспроизвести
+    button.actions__btn(type="button")
+      +icon-circle
+      span.visually-hidden Запись
+    button.actions__btn(type="button")
+      +icon-square
+      span.visually-hidden Стоп

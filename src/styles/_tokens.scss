@@ -1,0 +1,82 @@
+$grid-steps: (
+  (min: null, max: 399px, cols: 2, card-max: 150px),
+  (min: 400px, max: 519px, cols: 3, card-max: 150px),
+  (min: 520px, max: 639px, cols: 4, card-max: 150px),
+  (min: 640px, max: 1023px, cols: 3, card-max: null),
+  (min: 1024px, max: 1439px, cols: 4, card-max: null),
+  (min: 1440px, max: 1919px, cols: 5, card-max: null),
+  (min: 1920px, max: null, cols: 6, card-max: null)
+);
+
+$bp-tablet: 640px;
+$bp-desktop: 1024px;
+
+@mixin from($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin upto($width) {
+  @media (max-width: $width - 1px) {
+    @content;
+  }
+}
+
+@mixin media-range($min, $max) {
+  @if $min == null {
+    @media (max-width: $max) {
+      @content;
+    }
+  } @else if $max == null {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  }
+}
+
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin sheen($top: 0.62, $bottom: 0.24) {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, $top),
+    rgba(255, 255, 255, $bottom)
+  );
+}
+
+@mixin glass($top: 0.62, $bottom: 0.24, $blur: 16px) {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, $top),
+    rgba(255, 255, 255, $bottom)
+  );
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur($blur) saturate(1.4);
+    backdrop-filter: blur($blur) saturate(1.4);
+  }
+}
+
+@mixin gloss($height: 52%, $radius: inherit) {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: $height;
+  border-radius: $radius;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.12) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
